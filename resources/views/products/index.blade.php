@@ -7,6 +7,8 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Data Products </title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    {{-- bootstrap icon --}}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
 </head>
 
 <body style="background: lightgray">
@@ -21,7 +23,8 @@
                 </div>
                 <div class="card border-0 shadow-sm rounded">
                     <div class="card-body">
-                        <a href="{{ route('products.create') }}" class="btn btn-md btn-success mb-3">ADD PRODUCT</a>
+                        <a href="{{ route('products.create') }}" class="btn btn-md btn-success mb-3"><i
+                                class="bi bi-plus-square"></i> Product</a>
                         <table class="table table-bordered">
                             <thead>
                                 <tr>
@@ -46,12 +49,14 @@
                                             <form onsubmit="return confirm('Apakah Anda Yakin ?');"
                                                 action="{{ route('products.destroy', $product->id) }}" method="POST">
                                                 <a href="{{ route('products.show', $product->id) }}"
-                                                    class="btn btn-sm btn-dark">SHOW</a>
+                                                    class="btn btn-sm btn-dark"><i class="bi bi-eye"></i></a>
                                                 <a href="{{ route('products.edit', $product->id) }}"
-                                                    class="btn btn-sm btn-primary">EDIT</a>
+                                                    class="btn btn-sm btn-primary"><i
+                                                        class="bi bi-pencil-square"></i></a>
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="submit" class="btn btn-sm btn-danger">HAPUS</button>
+                                                <button type="submit" class="btn btn-sm btn-danger"><i
+                                                        class="bi bi-trash"></i></button>
                                             </form>
                                         </td>
                                     </tr>
