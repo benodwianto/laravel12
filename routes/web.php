@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CartController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\RajaOngkirController;
@@ -14,4 +15,5 @@ Route::resource('products', ProductController::class);
 Route::get('/rajaongkir', [RajaOngkirController::class, 'index'])->name('rajaongkir.index');
 Route::get('/cities/{provinceId}', [RajaOngkirController::class, 'getcities']);
 Route::get('/districts/{cityId}', [RajaOngkirController::class, 'getDistrict']);
-Route::get('/ongkir', [RajaOngkirController::class, 'checkOngkir']);
+Route::post('/ongkir', [RajaOngkirController::class, 'checkOngkir']);
+Route::resource('cart', CartController::class);

@@ -246,7 +246,7 @@
                     $('.btn-check').text('Memproses...');
 
                     $.ajax({
-                        url: "/check-ongkir",
+                        url: "/ongkir",
                         type: "POST",
                         dataType: "JSON",
                         data: {
