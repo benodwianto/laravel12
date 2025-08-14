@@ -6,7 +6,7 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\RajaOngkirController;
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('index');
 });
 
 
