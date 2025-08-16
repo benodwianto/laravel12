@@ -28,6 +28,7 @@ class ProductController extends Controller
             'title' => 'required|min:5',
             'description' => 'required|min:10',
             'price' => 'required|numeric',
+            'dicount' => 'numeric',
             'stock' => 'required|numeric',
         ]);
 
@@ -40,6 +41,7 @@ class ProductController extends Controller
             'title' => $request->title,
             'description' => $request->description,
             'price' => $request->price,
+            'discount' => $request->discount,
             'stock' => $request->stock,
         ]);
 
@@ -65,12 +67,14 @@ class ProductController extends Controller
             'title' => 'required|min:5',
             'description' => 'required|min:10',
             'price' => 'required|numeric',
+            'discount' => 'numeric',
             'stock' => 'required|numeric',
         ]);
 
         $product->title = $request->title;
         $product->description = $request->description;
         $product->price = $request->price;
+        $product->discount = $request->discount;
         $product->stock = $request->stock;
 
         if ($request->hasFile('image')) {

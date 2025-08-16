@@ -1,14 +1,15 @@
 <?php
 
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\RajaOngkirController;
 
-Route::get('/', function () {
-    return view('index');
-});
-
+// Route::get('/', function () {
+//     return view('index');
+// });
+Route::get('/', [HomeController::class, 'index']);
 
 Route::resource('products', ProductController::class);
 

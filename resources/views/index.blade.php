@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Aurahunt</title>
+    <link rel="icon" type="image/png" href="{{ asset('images/logofav.png') }}">
 
     {{-- Bootstrap --}}
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
@@ -17,12 +18,48 @@
     <style>
         body {
             font-family: poppins;
-            background-color: #E5E5E5;
+            background-color: #d3bfbf;
         }
 
         .navbar {
             box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
             color: #101820;
+        }
+
+        .carousel-control-prev-icon,
+        .carousel-control-next-icon {
+            filter: invert(1) grayscale(100);
+        }
+
+        .fixed-img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            object-position: center;
+            border-radius: 5px;
+        }
+
+        .product-price .final-price {
+            font-size: 18px;
+            font-weight: bold;
+            color: #111;
+            display: block;
+        }
+
+        .product-price .old-price {
+            text-decoration: line-through;
+            color: #888;
+            font-size: 14px;
+        }
+
+        .product-price .discount {
+            background: #dc3545;
+            /* merah bootstrap */
+            color: #fff;
+            font-size: 12px;
+            font-weight: bold;
+            padding: 2px 6px;
+            border-radius: 3px;
         }
     </style>
 </head>
@@ -134,20 +171,85 @@
             <span class="visually-hidden">Next</span>
         </button>
     </div>
-
     {{-- Slide Photo End --}}
 
-    {{-- Product --}}
-    <div class="container" id="product">
-        <div class="row">
+    <div class="container my-4" id="product">
+        <div class="row mb-4">
             <div class="col-md-12 mt-6 text-center">
-                <h1 class="text-center">Produk Kami</h1>
+                <h1 class="text-center fw-bold">Produk Kami</h1>
                 <img src="{{ asset('images/in-stock.png') }}" class="img-fluid mx-auto d-block"
                     style="max-width: 100px;" alt="Logo Product">
             </div>
         </div>
-    </div>
 
+        <div class="row">
+            {{-- Filter --}}
+            <div class="col-md-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Filter Produk</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
+                        <p class="card-text">Some quick example text to build on the card title and make up the bulk
+                            of the card's content.</p>
+                        <a href="#" class="card-link">Card link</a>
+                        <a href="#" class="card-link">Another link</a>
+                    </div>
+                </div>
+            </div>
+
+            {{-- Product list --}}
+            <div class="col-md-9">
+                <div class="row">
+                    @foreach ($products as $product)
+                        <div class="col-md-4 mb-4">
+                            <div class="card h-100">
+                                <img src="{{ asset('images/' . $product->image) }}" class="card-img-top fixed-img"
+                                    alt="{{ $product->title }}">
+                                <div class="card-body">
+                                    <small class="card-title">{{ $product->title }}</small>
+
+                                    {{-- Harga & Diskon --}}
+                                    <div class="product-price mt-2">
+                                        @if (!empty($product->discount) && $product->discount > 0)
+                                            @php
+                                                // Hitung harga setelah diskon
+                                                $finalPrice =
+                                                    $product->price - ($product->price * $product->discount) / 100;
+                                            @endphp
+
+                                            <span class="final-price fw-bold text-danger">
+                                                Rp {{ number_format($finalPrice, 0, ',', '.') }}
+                                            </span>
+
+                                            <div class="d-flex align-items-center gap-2">
+                                                <span class="old-price text-decoration-line-through text-muted">
+                                                    Rp {{ number_format($product->price, 0, ',', '.') }}
+                                                </span>
+                                                <span class="discount badge bg-danger">
+                                                    -{{ $product->discount }}%
+                                                </span>
+                                            </div>
+                                        @else
+                                            <span class="final-price">
+                                                Rp {{ number_format($product->price, 0, ',', '.') }}
+                                            </span>
+                                        @endif
+                                    </div>
+
+                                    <p class="card-text mt-2">{!! $product->description !!}</p>
+
+                                    <a href="#" class="btn btn-warning">
+                                        <i class="bi bi-cart-plus"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+
+        </div>
+    </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous">
