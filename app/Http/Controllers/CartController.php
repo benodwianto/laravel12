@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Cart;
 
 class CartController extends Controller
 {
@@ -16,17 +17,24 @@ class CartController extends Controller
         $request->validate([
             'product_id' => 'required|exists:products,id',
             'quantity' => 'required|integer|min:1',
+            'user_id' => 'required|exists:users,id',
         ]);
 
-        $cart = session()->get('cart', []);
+        $cart = Cart::where('product_id', $request->product_id)
+            ->where('user_id', $request->user_id)
+            ->first();
 
-        $cart[$request->product_id] = [
-            'product_id' => $request->product_id,
-            'quantity' => $request->quantity,
-        ];
+        if ($cart) {
+            $cart->quantity += $request->quantity;
+            $cart->save();
+        } else {
+            $cart = Cart::create([
+                'product_id' => $request->product_id,
+                'quantity' => $request->quantity,
+                'user_id' => $request->user_id,
+            ]);
+        }
 
-        session()->put('cart', $cart);
-
-        return redirect()->route('cart.index')->with('success', 'Product added to cart successfully.');
+        return redirect()->back()->with('success', 'Produk berhasil ditambahkan ke keranjang.');
     }
 }

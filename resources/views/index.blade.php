@@ -109,6 +109,32 @@
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
             /* biar tetap elegan */
         }
+
+        input[type=number]::-webkit-inner-spin-button,
+        input[type=number]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        input[type=number] {
+            -moz-appearance: textfield;
+            /* Firefox */
+        }
+
+        /* Tampilkan dropdown saat hover */
+        .nav-item.dropdown:hover .dropdown-menu {
+            display: block;
+            margin-top: 0;
+        }
+
+        /* Biar dropdown cart lebih lebar tapi tetap rapi */
+        .cart-dropdown-menu {
+            min-width: 400px;
+            max-width: 600px;
+            right: 0;
+            left: auto;
+            white-space: normal;
+        }
     </style>
 </head>
 
@@ -152,28 +178,59 @@
                 <!-- Cart & User -->
                 <ul class="navbar-nav mb-2 mb-lg-0 d-flex align-items-center">
                     <!-- Cart -->
-                    <li class="nav-item dropdown me-3">
-                        <a class="nav-link position-relative" href="#" id="cartDropdown" role="button"
-                            data-bs-toggle="dropdown">
+                    <li class="nav-item dropdown me-3 cart-dropdown">
+                        <a class="nav-link position-relative" href="#" id="cartDropdown" data-bs-toggle="dropdown"
+                            aria-expanded="false">
                             <i class="bi bi-cart-fill fs-5"></i>
                             <span
                                 class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                                3
+                                {{ count($carts) }}
                             </span>
                         </a>
-                        <ul class="dropdown-menu dropdown-menu-end shadow" aria-labelledby="cartDropdown">
-                            <li><a class="dropdown-item" href="#">Your Cart</a></li>
-                            <li><a class="dropdown-item" href="#">Checkout</a></li>
+                        <ul class="dropdown-menu dropdown-menu-end shadow cart-dropdown-menu"
+                            aria-labelledby="cartDropdown" id="cartDropdownMenu">
+
+                            <li class="dropdown-header mb-0">Baru Ditambahkan</li>
+
+                            <li class="px-3 py-2">
+                                @foreach ($carts->take(3) as $cart)
+                                    <div class="d-flex align-items-center justify-content-between w-100 mt-2">
+                                        <img src="{{ asset('images/' . $cart->product->image) }}" class="me-2 rounded"
+                                            style="width: 50px" alt="Product">
+                                        <div class="d-flex justify-content-between align-items-center w-100">
+                                            <span
+                                                class="me-2">{{ Str::limit($cart->product->title, 20) ?? 'Produk' }}</span>
+                                            <small
+                                                class="text-danger">Rp{{ number_format($cart->product->price ?? 0, 0, ',', '.') }}</small>
+                                        </div>
+                                    </div>
+                                @endforeach
+
+                            </li>
+
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+
+                            <li>
+                                <a class="dropdown-item text-center text-primary fw-bold"
+                                    href="{{ route('cart.index') }}">
+                                    Lihat Keranjang Belanja
+                                </a>
+                            </li>
                         </ul>
                     </li>
+                </ul>
 
-                    <!-- User -->
+
+                <!-- User -->
+                @auth
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="userDropdown"
                             role="button" data-bs-toggle="dropdown">
                             <img src="{{ asset('images/user.jpg') }}" alt="user photo" class="rounded-circle me-2"
                                 style="width: 32px; height: 32px; object-fit: cover;">
-                            <span class="fw-semibold">Beno</span>
+                            <span class="fw-semibold">{{ Auth::user()->name }}</span>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end shadow" aria-labelledby="userDropdown">
                             <li><a class="dropdown-item" href="#">Profile</a></li>
@@ -181,9 +238,25 @@
                             <li>
                                 <hr class="dropdown-divider">
                             </li>
-                            <li><a class="dropdown-item text-danger" href="#">Logout</a></li>
+                            <li>
+                                <form action="{{ route('logout') }}" method="POST" class="d-inline">
+                                    @csrf
+                                    <button type="submit" class="dropdown-item text-danger">Logout</button>
+                                </form>
+                            </li>
                         </ul>
                     </li>
+                @endauth
+
+                @guest
+                    <li class="nav-item d-flex gap-2">
+                        <a href="#" class="btn btn-outline-primary rounded-pill px-3" data-bs-toggle="modal"
+                            data-bs-target="#authModal">Masuk</a>
+                        <a href="#" class="btn btn-primary rounded-pill px-3" data-bs-toggle="modal"
+                            data-bs-target="#authModal">Daftar</a>
+                    </li>
+                @endguest
+
                 </ul>
 
             </div>
@@ -253,7 +326,6 @@
     </div>
 
     {{-- Slide Photo End --}}
-
     <div class="container my-4" id="product">
         <div class="row mb-5 shadow-sm">
             <div class="col-md-12 text-center">
@@ -271,7 +343,6 @@
                 <p class="mt-2 text-muted">Temukan produk terbaik pilihan kami</p>
             </div>
         </div>
-
 
         <div class="row shadow-sm">
             {{-- Filter --}}
@@ -293,58 +364,152 @@
                 <div class="row">
                     @foreach ($products as $product)
                         <div class="col-md-4 mb-4">
-                            <a href="{{ route('products.show', $product->id) }}"
-                                class="text-decoration-none text-dark">
-                                <div class="card h-100 product-card">
-                                    <img src="{{ asset('images/' . $product->image) }}" class="card-img-top fixed-img"
-                                        alt="{{ $product->title }}">
+                            <div class="card h-100 product-card">
+                                <a href="{{ route('products.show', $product->id) }}">
+                                    <img src="{{ asset('images/' . $product->image) }}"
+                                        class="card-img-top fixed-img" alt="{{ $product->title }}">
+                                </a>
 
-                                    <div class="card-body d-flex flex-column">
+                                <div class="card-body d-flex flex-column">
+                                    <a href="{{ route('products.show', $product->id) }}"
+                                        class="text-decoration-none text-dark">
                                         <small class="card-title">{{ Str::limit($product->title, 30, '..') }}</small>
+                                    </a>
 
-                                        {{-- Harga & Diskon --}}
-                                        <div class="product-price mt-2">
-                                            @if (!empty($product->discount) && $product->discount > 0)
-                                                @php
-                                                    $finalPrice =
-                                                        $product->price - ($product->price * $product->discount) / 100;
-                                                @endphp
-                                                <span class="final-price fw-bold text-danger">
-                                                    Rp {{ number_format($finalPrice, 0, ',', '.') }}
-                                                </span>
-                                                <div class="d-flex align-items-center gap-2">
-                                                    <span class="old-price text-decoration-line-through text-muted">
-                                                        Rp {{ number_format($product->price, 0, ',', '.') }}
-                                                    </span>
-                                                    <span class="discount badge bg-danger">
-                                                        -{{ $product->discount }}%
-                                                    </span>
-                                                </div>
-                                            @else
-                                                <span class="final-price">
+                                    {{-- Harga & Diskon --}}
+                                    <div class="product-price mt-2">
+                                        @if (!empty($product->discount) && $product->discount > 0)
+                                            @php
+                                                $finalPrice =
+                                                    $product->price - ($product->price * $product->discount) / 100;
+                                            @endphp
+                                            <span class="final-price fw-bold text-danger">
+                                                Rp {{ number_format($finalPrice, 0, ',', '.') }}
+                                            </span>
+                                            <div class="d-flex align-items-center gap-2">
+                                                <span class="old-price text-decoration-line-through text-muted">
                                                     Rp {{ number_format($product->price, 0, ',', '.') }}
                                                 </span>
-                                            @endif
-                                        </div>
-
-                                        <p class="card-text mt-2">
-                                            {!! Str::limit(strip_tags($product->description), 50, '...') !!}
-                                        </p>
-
-                                        {{-- Tombol keranjang di tengah --}}
-                                        <div class="mt-auto d-flex justify-content-center">
-                                            <button class="btn btn-cart">
-                                                <i class="bi bi-cart-plus"></i> Tambah ke Keranjang
-                                            </button>
-                                        </div>
+                                                <span class="discount badge bg-danger">
+                                                    -{{ $product->discount }}%
+                                                </span>
+                                            </div>
+                                        @else
+                                            <span class="final-price">
+                                                Rp {{ number_format($product->price, 0, ',', '.') }}
+                                            </span>
+                                        @endif
                                     </div>
+
+                                    <p class="card-text mt-2">
+                                        Deskripsi: {!! Str::limit(strip_tags($product->description), 50, '...') !!}
+                                    </p>
+
+                                    <div class="mt-auto d-flex justify-content-center align-items-center">
+                                        <form action="{{ route('cart.store') }}" method="POST"
+                                            class="d-flex align-items-center gap-2">
+                                            @csrf
+                                            <input type="hidden" name="product_id" value="{{ $product->id }}">
+                                            <input type="hidden" name="user_id" value="{{ Auth::user()->id }}">
+
+                                            <div class="input-group input-group-sm" style="width: 100px;">
+                                                <button type="button" class="btn btn-outline-secondary"
+                                                    onclick="this.parentNode.querySelector('input').stepDown()">-</button>
+                                                <input type="number" name="quantity" value="1" min="1"
+                                                    class="form-control text-center border-secondary" />
+                                                <button type="button" class="btn btn-outline-secondary"
+                                                    onclick="this.parentNode.querySelector('input').stepUp()">+</button>
+                                            </div>
+
+                                            <button type="submit" class="btn btn-cart ms-2">
+                                                <i class="bi bi-cart-plus"></i> Tambah
+                                            </button>
+                                        </form>
+                                    </div>
+
                                 </div>
-                            </a>
+                            </div>
                         </div>
                     @endforeach
                 </div>
             </div>
 
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="authModal" tabindex="-1" aria-labelledby="authModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content rounded-3 shadow-lg">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="authModalLabel">Masuk / Daftar</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+
+                    <!-- Nav Tab (Login / Register) -->
+                    <ul class="nav nav-tabs mb-3" id="authTabs" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" id="login-tab" data-bs-toggle="tab"
+                                data-bs-target="#loginTab" type="button" role="tab">Masuk</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="register-tab" data-bs-toggle="tab"
+                                data-bs-target="#registerTab" type="button" role="tab">Daftar</button>
+                        </li>
+                    </ul>
+
+                    <!-- Tab Content -->
+                    <div class="tab-content">
+                        <!-- Login Form -->
+                        <div class="tab-pane fade show active" id="loginTab" role="tabpanel">
+                            <form method="POST" action="{{ route('login') }}">
+                                @csrf
+                                <div class="mb-3">
+                                    <label for="emailLogin" class="form-label">Email</label>
+                                    <input type="email" class="form-control" id="emailLogin" name="email"
+                                        required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="passwordLogin" class="form-label">Password</label>
+                                    <input type="password" class="form-control" id="passwordLogin" name="password"
+                                        required>
+                                </div>
+                                <button type="submit" class="btn btn-primary w-100">Masuk</button>
+                            </form>
+                        </div>
+
+                        <!-- Register Form -->
+                        <div class="tab-pane fade" id="registerTab" role="tabpanel">
+                            <form method="POST" action="{{ route('register') }}">
+                                @csrf
+                                <div class="mb-3">
+                                    <label for="nameRegister" class="form-label">Nama Lengkap</label>
+                                    <input type="text" class="form-control" id="nameRegister" name="name"
+                                        required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="emailRegister" class="form-label">Email</label>
+                                    <input type="email" class="form-control" id="emailRegister" name="email"
+                                        required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="passwordRegister" class="form-label">Password</label>
+                                    <input type="password" class="form-control" id="passwordRegister"
+                                        name="password" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="passwordConfirm" class="form-label">Konfirmasi Password</label>
+                                    <input type="password" class="form-control" id="passwordConfirm"
+                                        name="password_confirmation" required>
+                                </div>
+                                <button type="submit" class="btn btn-success w-100">Daftar</button>
+                            </form>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
         </div>
     </div>
 

@@ -5,6 +5,7 @@ use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\RajaOngkirController;
+use App\Http\Controllers\AuthController;
 
 // Route::get('/', function () {
 //     return view('index');
@@ -17,4 +18,9 @@ Route::get('/rajaongkir', [RajaOngkirController::class, 'index'])->name('rajaong
 Route::get('/cities/{provinceId}', [RajaOngkirController::class, 'getcities']);
 Route::get('/districts/{cityId}', [RajaOngkirController::class, 'getDistrict']);
 Route::post('/ongkir', [RajaOngkirController::class, 'checkOngkir']);
+
 Route::resource('cart', CartController::class);
+
+Route::post('/login', [AuthController::class, 'login'])->name('login');
+Route::post('/register', [AuthController::class, 'register'])->name('register');
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
