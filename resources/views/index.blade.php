@@ -144,7 +144,7 @@
         style="background: linear-gradient(90deg, #f8f9fa, #e3f2fd); border-radius: 0 0 20px 20px;">
         <div class="container">
             <!-- Brand -->
-            <a class="navbar-brand fw-bold" href="/">
+            <a class="navbar-brand fw-bold" href="">
                 <img src="{{ asset('images/aurahuntlogo.png') }}" alt="Aurahunt Logo" style="width: 140px">
             </a>
 
@@ -190,7 +190,8 @@
                         <ul class="dropdown-menu dropdown-menu-end shadow cart-dropdown-menu"
                             aria-labelledby="cartDropdown" id="cartDropdownMenu">
 
-                            <li class="dropdown-header mb-0">Baru Ditambahkan</li>
+                            <li class="dropdown-header mb-0">
+                                {{ count($carts) ? 'Baru Ditambahkan' : 'Keranjang Belanja Kosong' }}</li>
 
                             <li class="px-3 py-2">
                                 @foreach ($carts->take(3) as $cart)
@@ -213,10 +214,16 @@
                             </li>
 
                             <li>
-                                <a class="dropdown-item text-center text-primary fw-bold"
-                                    href="{{ route('cart.index') }}">
-                                    Lihat Keranjang Belanja
-                                </a>
+                                @if (count($carts) > 0)
+                                    <a class="dropdown-item text-center text-primary fw-bold"
+                                        href="{{ route('cart.index') }}">
+                                        Lihat Keranjang Belanja
+                                    </a>
+                                @else
+                                    <a class="dropdown-item text-center text-primary fw-bold" href="#product">
+                                        Mulai Belanja
+                                    </a>
+                                @endif
                             </li>
                         </ul>
                     </li>
@@ -405,12 +412,13 @@
                                         Deskripsi: {!! Str::limit(strip_tags($product->description), 50, '...') !!}
                                     </p>
 
+                                    {{-- alert --}}
+                                    @include('alert')
                                     <div class="mt-auto d-flex justify-content-center align-items-center">
                                         <form action="{{ route('cart.store') }}" method="POST"
                                             class="d-flex align-items-center gap-2">
                                             @csrf
                                             <input type="hidden" name="product_id" value="{{ $product->id }}">
-                                            <input type="hidden" name="user_id" value="{{ Auth::user()->id }}">
 
                                             <div class="input-group input-group-sm" style="width: 100px;">
                                                 <button type="button" class="btn btn-outline-secondary"

@@ -10,7 +10,7 @@ use App\Http\Controllers\AuthController;
 // Route::get('/', function () {
 //     return view('index');
 // });
-Route::get('/', [HomeController::class, 'index']);
+Route::get('/home', [HomeController::class, 'index'])->name('home');
 
 Route::resource('products', ProductController::class);
 
