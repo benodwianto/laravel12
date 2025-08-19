@@ -1,7 +1,7 @@
 <style>
     .custom-alert {
         position: fixed;
-        top: 20px;
+        top: 100px;
         left: 50%;
         transform: translateX(-50%);
         z-index: 9999;
@@ -11,7 +11,7 @@
         gap: 10px;
 
         padding: 12px 16px 12px 14px;
-        min-width: 280px;
+        min-width: 150px;
         max-width: 520px;
 
         color: #fff;
@@ -54,13 +54,13 @@
 
 @if (session('success'))
     <div class="custom-alert success" role="alert">
-        <span class="msg">✔ {{ session('success') }}</span>
+        <span class="msg">{{ session('success') }} <i class="bi bi-check"></i></span>
     </div>
 @endif
 
 @if (session('error'))
     <div class="custom-alert error" role="alert">
-        <span class="msg"> {{ session('error') }}</span>
+        <span class="msg">{{ session('error') }} <i class="bi bi-exclamation-triangle"></i></span>
     </div>
 @endif
 
