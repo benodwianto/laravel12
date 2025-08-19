@@ -1,15 +1,8 @@
-<!DOCTYPE html>
-<html lang="id">
+@extends('layouts.app')
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Keranjang Belanja</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
+@section('title', 'Keranjang Belanja')
 
-<body class="bg-light">
-
+@section('content')
     <div class="container py-4">
         <div class="row">
             <!-- Daftar Produk -->
@@ -75,5 +68,4 @@
             </div>
         </div>
     </div>
-
-
+@endsection
