@@ -11,8 +11,10 @@ class Product extends Model
         'title',
         'description',
         'price',
+        'modal_price',
         'discount',
-        'stock'
+        'stock',
+        'weight',
     ];
 
     public function cart()

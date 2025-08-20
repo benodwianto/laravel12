@@ -64,12 +64,27 @@
                             </div>
 
                             <div class="row">
+                                {{-- Modal price --}}
+                                <div class="col-md-4">
+                                    <div class="mb-3">
+                                        <label class="form-label fw-semibold">Harga Modal</label>
+                                        <input type="number"
+                                            class="form-control @error('modal_price') is-invalid @enderror"
+                                            name="modal_price" value="{{ old('modal_price') }}"
+                                            placeholder="Masukkan Harga Modal" min="0">
+                                        @error('modal_price')
+                                            <small class="text-danger">{{ $message }}</small>
+                                        @enderror
+                                    </div>
+                                </div>
+
                                 {{-- PRICE --}}
                                 <div class="col-md-4">
                                     <div class="mb-3">
                                         <label class="form-label fw-semibold">Harga</label>
                                         <input type="number" class="form-control @error('price') is-invalid @enderror"
-                                            name="price" value="{{ old('price') }}" placeholder="Masukkan Harga">
+                                            name="price" value="{{ old('price') }}" placeholder="Masukkan Harga"
+                                            min="0">
                                         @error('price')
                                             <small class="text-danger">{{ $message }}</small>
                                         @enderror
@@ -81,8 +96,22 @@
                                     <div class="mb-3">
                                         <label class="form-label fw-semibold">Stok</label>
                                         <input type="number" class="form-control @error('stock') is-invalid @enderror"
-                                            name="stock" value="{{ old('stock') }}" placeholder="Masukkan Stok">
+                                            name="stock" value="{{ old('stock') }}" placeholder="Masukkan Stok"
+                                            min="0">
                                         @error('stock')
+                                            <small class="text-danger">{{ $message }}</small>
+                                        @enderror
+                                    </div>
+                                </div>
+
+                                {{-- berat --}}
+                                <div class="col-md-4">
+                                    <div class="mb-3">
+                                        <label class="form-label fw-semibold">Berat Produk (gr)</label>
+                                        <input type="number" class="form-control @error('weight') is-invalid @enderror"
+                                            name="weight" value="{{ old('weight') }}"
+                                            placeholder="Masukkan Berat (gr)" min="0">
+                                        @error('weight')
                                             <small class="text-danger">{{ $message }}</small>
                                         @enderror
                                     </div>
@@ -94,7 +123,7 @@
                                         <label class="form-label fw-semibold">Diskon (%)</label>
                                         <input type="number"
                                             class="form-control @error('discount') is-invalid @enderror" name="discount"
-                                            value="{{ old('discount') }}" placeholder="0 - 100">
+                                            value="{{ old('discount') }}" placeholder="0 - 100" min="0">
                                         @error('discount')
                                             <small class="text-danger">{{ $message }}</small>
                                         @enderror

@@ -249,4 +249,54 @@
             </div>
         </div>
     </div>
+
+    <section class="py-5 bg-light my-4">
+        <div class="container" id="about">
+            <div class="row text-center">
+                <h2 class="fw-bold" >Tentang <span class="text-primary">Kami</span></h2>
+
+                <!-- Produk Lengkap -->
+                <div class="col-md-4 mb-4">
+                    <i class="bi bi-phone fs-1 text-primary"></i>
+                    <h5 class="fw-bold mt-3">Aksesoris Lengkap</h5>
+                    <p>Tersedia berbagai aksesoris smartphone & elektronik dengan pilihan terbaru dan kualitas terbaik.</p>
+                </div>
+
+                <!-- Service Cepat -->
+                <div class="col-md-4 mb-4">
+                    <i class="bi bi-tools fs-1 text-success"></i>
+                    <h5 class="fw-bold mt-3">Service Android Cepat</h5>
+                    <p>Layanan perbaikan smartphone bisa ditunggu di tempat, praktis dan terpercaya.</p>
+                </div>
+
+                <!-- Harga Terjangkau -->
+                <div class="col-md-4 mb-4">
+                    <i class="bi bi-cash-coin fs-1 text-warning"></i>
+                    <h5 class="fw-bold mt-3">Harga Terjangkau</h5>
+                    <p>Dapatkan produk & layanan dengan harga bersahabat langsung dari sumber terpercaya.</p>
+                </div>
+
+            </div>
+            <hr class="my-0">
+
+            <div class="row text-center mt-4">
+
+                <!-- Garansi -->
+                <div class="col-md-6 mb-4">
+                    <i class="bi bi-shield-check fs-1 text-info"></i>
+                    <h5 class="fw-bold mt-3">Garansi & Kualitas</h5>
+                    <p>Kami menjamin produk dan layanan berkualitas agar Anda merasa aman dan nyaman.</p>
+                </div>
+
+                <!-- Pelayanan Ramah -->
+                <div class="col-md-6 mb-4">
+                    <i class="bi bi-emoji-smile fs-1 text-danger"></i>
+                    <h5 class="fw-bold mt-3">Pelayanan Ramah</h5>
+                    <p>Staff siap membantu Anda dengan konsultasi & service terbaik untuk kebutuhan gadget Anda.</p>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
 @endsection

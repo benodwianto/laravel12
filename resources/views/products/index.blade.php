@@ -28,11 +28,14 @@
                         <table class="table table-bordered">
                             <thead>
                                 <tr>
-                                    <th scope="col">IMAGE</th>
-                                    <th scope="col">TITLE</th>
-                                    <th scope="col">PRICE</th>
-                                    <th scope="col">STOCK</th>
-                                    <th scope="col" style="width: 20%">ACTIONS</th>
+                                    <th scope="col">Foto</th>
+                                    <th scope="col">Produk</th>
+                                    <th scope="col">Modal Harga</th>
+                                    <th scope="col">Harga</th>
+                                    <th scope="col">Stok</th>
+                                    <th scope="col">Diskon</th>
+                                    <th scope="col">Berat (gr)</th>
+                                    <th scope="col" style="width: 20%">Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -43,8 +46,11 @@
                                                 style="width: 150px">
                                         </td>
                                         <td>{{ $product->title }}</td>
+                                        <td>{{ 'Rp ' . number_format($product->modal_price, 2, ',', '.') }}</td>
                                         <td>{{ 'Rp ' . number_format($product->price, 2, ',', '.') }}</td>
                                         <td>{{ $product->stock }}</td>
+                                        <td>{{ $product->discount ?? '-' }}%</td>
+                                        <td>{{ $product->weight ?? '-' }}</td>
                                         <td class="text-center">
                                             <form onsubmit="return confirm('Apakah Anda Yakin ?');"
                                                 action="{{ route('products.destroy', $product->id) }}" method="POST">

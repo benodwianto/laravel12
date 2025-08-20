@@ -27,9 +27,11 @@ class ProductController extends Controller
             'image' => 'required|image|mimes:jpeg,jpg,png|max:2048',
             'title' => 'required|min:5',
             'description' => 'required|min:10',
+            'modal_price' => 'required|numeric',
             'price' => 'required|numeric',
             'dicount' => 'numeric',
             'stock' => 'required|numeric',
+            'weight' => 'numeric',
         ]);
 
         $image = $request->file('image');
@@ -40,12 +42,14 @@ class ProductController extends Controller
             'image' => $image_name,
             'title' => $request->title,
             'description' => $request->description,
+            'modal_price' => $request->modal_price,
             'price' => $request->price,
             'discount' => $request->discount,
             'stock' => $request->stock,
+            'weight' => $request->weight
         ]);
 
-        return redirect()->route('products.index')->with('success', 'Product created successfully.');
+        return redirect()->route('products.index')->with('success', 'Produk berhasil ditambahkan.');
     }
 
     public function show(Product $product)
@@ -66,16 +70,20 @@ class ProductController extends Controller
             'image' => 'nullable|image|mimes:jpeg,jpg,png|max:2048',
             'title' => 'required|min:5',
             'description' => 'required|min:10',
+            'modal_price' => 'required|numeric',
             'price' => 'required|numeric',
             'discount' => 'numeric',
             'stock' => 'required|numeric',
+            'weight' => 'numeric',
         ]);
 
         $product->title = $request->title;
         $product->description = $request->description;
+        $product->modal_price = $request->modal_price;
         $product->price = $request->price;
         $product->discount = $request->discount;
         $product->stock = $request->stock;
+        $product->weight = $request->weight;
 
         if ($request->hasFile('image')) {
             if ($product->image && file_exists(public_path('images/' . $product->image))) {
@@ -91,7 +99,7 @@ class ProductController extends Controller
         $product->save();
 
         return redirect()->route('products.show', $product->id)
-            ->with('success', 'Product updated successfully.');
+            ->with('success', 'Produk berhasil diperbarui.');
     }
 
     public function destroy(Product $product)

@@ -16,9 +16,11 @@ return new class extends Migration
             $table->string('image');
             $table->string('title');
             $table->text('description');
+            $table->bigInteger('modal_price');
             $table->bigInteger('price');
             $table->bigInteger('discount')->default(0);
             $table->integer('stock')->default(0);
+            $table->bigInteger('weight')->default(0);
             $table->timestamps();
         });
     }

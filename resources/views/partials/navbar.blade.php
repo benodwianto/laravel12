@@ -3,7 +3,7 @@
         style="background: linear-gradient(90deg, #f8f9fa, #e3f2fd); border-radius: 0 0 20px 20px;">
         <div class="container">
             <!-- Brand -->
-            <a class="navbar-brand fw-bold" href="">
+            <a class="navbar-brand fw-bold" href="{{ route('home') }}">
                 <img src="{{ asset('images/aurahuntlogo.png') }}" alt="Aurahunt Logo" style="width: 140px">
             </a>
 
@@ -19,8 +19,16 @@
                 <!-- Left links -->
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
-                        <a class="nav-link fw-semibold position-relative" href="#product" style="transition: 0.3s;">
-                            Product
+                        <a class="nav-link fw-semibold position-relative" href="{{ route('home') }}#product" style="transition: 0.3s;">
+                            Produk
+                            <span class="d-block"
+                                style="height:2px; background:#0d6efd; width:0; transition:width 0.3s;"></span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link fw-semibold position-relative" href="{{ route('home') }}#about"
+                            style="transition: 0.3s;">
+                            Tentang Kami
                             <span class="d-block"
                                 style="height:2px; background:#0d6efd; width:0; transition:width 0.3s;"></span>
                         </a>
@@ -31,7 +39,7 @@
                 <form class="d-flex me-3">
                     <input class="form-control me-2 rounded-pill" type="search" placeholder="Search..."
                         aria-label="Search">
-                    <button class="btn btn-primary rounded-pill px-3" type="submit">Search</button>
+                    <button class="btn btn-primary rounded-pill px-3" type="submit"><i class="bi bi-search"></i></button>
                 </form>
 
                 <!-- Cart & User -->

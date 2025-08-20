@@ -71,12 +71,24 @@
                             </div>
 
                             <div class="row">
-                                {{-- PRICE --}}
+                                {{-- Modal Harga --}}
+                                <div class="col-md-4 mb-3">
+                                    <label class="form-label fw-semibold">Harga Modal (Rp)</label>
+                                    <input type="number"
+                                        class="form-control @error('modal_price') is-invalid @enderror" id="modal_price"
+                                        name="modal_price" value="{{ old('modal_price', $product->modal_price) }}"
+                                        min="0" placeholder="Masukkan Harga">
+                                    @error('modal_price')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+
+                                {{-- Harga --}}
                                 <div class="col-md-4 mb-3">
                                     <label class="form-label fw-semibold">Harga (Rp)</label>
                                     <input type="number" class="form-control @error('price') is-invalid @enderror"
                                         id="price" name="price" value="{{ old('price', $product->price) }}"
-                                        placeholder="Masukkan Harga">
+                                        min="0" placeholder="Masukkan Harga">
                                     @error('price')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
@@ -86,7 +98,7 @@
                                 <div class="col-md-4 mb-3">
                                     <label class="form-label fw-semibold">Diskon (%)</label>
                                     <input type="number" class="form-control @error('discount') is-invalid @enderror"
-                                        id="discount" name="discount"
+                                        id="discount" name="discount" min="0"
                                         value="{{ old('discount', $product->discount ?? 0) }}" placeholder="0 - 100">
                                     @error('discount')
                                         <div class="invalid-feedback">{{ $message }}</div>
@@ -98,8 +110,19 @@
                                     <label class="form-label fw-semibold">Stok</label>
                                     <input type="number" class="form-control @error('stock') is-invalid @enderror"
                                         name="stock" value="{{ old('stock', $product->stock) }}"
-                                        placeholder="Jumlah stok">
+                                        placeholder="Jumlah stok" min="0">
                                     @error('stock')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+
+                                {{-- Berat --}}
+                                <div class="col-md-4 mb-3">
+                                    <label class="form-label fw-semibold">Berat (gr)</label>
+                                    <input type="number" class="form-control @error('weight') is-invalid @enderror"
+                                        name="weight" value="{{ old('weight', $product->weight) }}"
+                                        placeholder="Jumlah stok" min="0">
+                                    @error('weight')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>

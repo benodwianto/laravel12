@@ -132,3 +132,9 @@ input[type="number"] {
     left: auto;
     z-index: 1050;
 }
+
+#about, #product {
+    position: relative;
+    padding-top: 80px; 
+    margin-top: -80px; 
+}
