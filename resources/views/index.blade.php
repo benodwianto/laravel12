@@ -180,7 +180,7 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content rounded-3 shadow-lg">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="authModalLabel">Masuk / Daftar</h5>
+                    <h5 class="modal-title" id="authModalLabel">Autentikasi Akun</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -188,57 +188,97 @@
                     <!-- Nav Tab (Login / Register) -->
                     <ul class="nav nav-tabs mb-3" id="authTabs" role="tablist">
                         <li class="nav-item" role="presentation">
-                            <button class="nav-link active" id="login-tab" data-bs-toggle="tab"
-                                data-bs-target="#loginTab" type="button" role="tab">Masuk</button>
+                            <button
+                                class="nav-link {{ $errors->has('email') || $errors->has('password') ? 'active' : '' }}"
+                                id="login-tab" data-bs-toggle="tab" data-bs-target="#loginTab" type="button"
+                                role="tab">Masuk</button>
                         </li>
                         <li class="nav-item" role="presentation">
-                            <button class="nav-link" id="register-tab" data-bs-toggle="tab"
-                                data-bs-target="#registerTab" type="button" role="tab">Daftar</button>
+                            <button
+                                class="nav-link {{ $errors->has('name') || $errors->has('password_confirmation') ? 'active' : '' }}"
+                                id="register-tab" data-bs-toggle="tab" data-bs-target="#registerTab" type="button"
+                                role="tab">Daftar</button>
                         </li>
                     </ul>
 
                     <!-- Tab Content -->
                     <div class="tab-content">
                         <!-- Login Form -->
-                        <div class="tab-pane fade show active" id="loginTab" role="tabpanel">
+                        <div class="tab-pane fade {{ $errors->has('email') || $errors->has('password') ? 'show active' : '' }}"
+                            id="loginTab" role="tabpanel">
                             <form method="POST" action="{{ route('login') }}">
                                 @csrf
                                 <div class="mb-3">
                                     <label for="emailLogin" class="form-label">Email</label>
-                                    <input type="email" class="form-control" id="emailLogin" name="email" required>
+                                    <input type="email" class="form-control @error('email_login') is-invalid @enderror"
+                                        id="emailLogin" name="email_login" value="{{ old('email_login') }}" required>
+                                    @error('email_login')
+                                        <small class="text-danger">{{ $message }}</small>
+                                    @enderror
                                 </div>
                                 <div class="mb-3">
                                     <label for="passwordLogin" class="form-label">Password</label>
-                                    <input type="password" class="form-control" id="passwordLogin" name="password"
-                                        required>
+                                    <div class="input-group">
+                                        <input type="password"
+                                            class="form-control @error('password_login') is-invalid @enderror"
+                                            id="passwordLogin" name="password_login" required>
+                                        <button type="button" class="btn btn-outline-secondary"
+                                            onclick="togglePassword('passwordLogin')">👁</button>
+                                    </div>
+                                    @error('password_login')
+                                        <small class="text-danger">{{ $message }}</small>
+                                    @enderror
+                                </div>
+                                <div class="mb-3 text-end">
+                                    <a href="#" class="text-decoration-none">Lupa
+                                        Password?</a>
                                 </div>
                                 <button type="submit" class="btn btn-primary w-100">Masuk</button>
                             </form>
                         </div>
 
                         <!-- Register Form -->
-                        <div class="tab-pane fade" id="registerTab" role="tabpanel">
+                        <div class="tab-pane fade {{ $errors->has('name') || $errors->has('password_confirmation') ? 'show active' : '' }}"
+                            id="registerTab" role="tabpanel">
                             <form method="POST" action="{{ route('register') }}">
                                 @csrf
                                 <div class="mb-3">
                                     <label for="nameRegister" class="form-label">Nama Lengkap</label>
-                                    <input type="text" class="form-control" id="nameRegister" name="name"
-                                        required>
+                                    <input type="text" class="form-control @error('name') is-invalid @enderror"
+                                        id="nameRegister" name="name" value="{{ old('name') }}" required>
+                                    @error('name')
+                                        <small class="text-danger">{{ $message }}</small>
+                                    @enderror
                                 </div>
                                 <div class="mb-3">
                                     <label for="emailRegister" class="form-label">Email</label>
-                                    <input type="email" class="form-control" id="emailRegister" name="email"
-                                        required>
+                                    <input type="email" class="form-control @error('email') is-invalid @enderror"
+                                        id="emailRegister" name="email" value="{{ old('email') }}" required>
+                                    @error('email')
+                                        <small class="text-danger">{{ $message }}</small>
+                                    @enderror
                                 </div>
                                 <div class="mb-3">
                                     <label for="passwordRegister" class="form-label">Password</label>
-                                    <input type="password" class="form-control" id="passwordRegister" name="password"
-                                        required>
+                                    <div class="input-group">
+                                        <input type="password"
+                                            class="form-control @error('password') is-invalid @enderror"
+                                            id="passwordRegister" name="password" required>
+                                        <button type="button" class="btn btn-outline-secondary"
+                                            onclick="togglePassword('passwordRegister')">👁</button>
+                                    </div>
+                                    @error('password')
+                                        <small class="text-danger">{{ $message }}</small>
+                                    @enderror
                                 </div>
                                 <div class="mb-3">
                                     <label for="passwordConfirm" class="form-label">Konfirmasi Password</label>
-                                    <input type="password" class="form-control" id="passwordConfirm"
-                                        name="password_confirmation" required>
+                                    <input type="password"
+                                        class="form-control @error('password_confirmation') is-invalid @enderror"
+                                        id="passwordConfirm" name="password_confirmation" required>
+                                    @error('password_confirmation')
+                                        <small class="text-danger">{{ $message }}</small>
+                                    @enderror
                                 </div>
                                 <button type="submit" class="btn btn-success w-100">Daftar</button>
                             </form>
@@ -250,10 +290,11 @@
         </div>
     </div>
 
+
     <section class="py-5 bg-light my-4">
         <div class="container" id="about">
             <div class="row text-center">
-                <h2 class="fw-bold" >Tentang <span class="text-primary">Kami</span></h2>
+                <h2 class="fw-bold">Tentang <span class="text-primary">Kami</span></h2>
 
                 <!-- Produk Lengkap -->
                 <div class="col-md-4 mb-4">

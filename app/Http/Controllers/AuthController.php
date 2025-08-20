@@ -17,15 +17,15 @@ class AuthController extends Controller
             'password' => 'required',
         ]);
 
-        $credentials = $request->only('email', 'password');
+        $credentials = $request->only('email_login', 'password_login');
 
         if (Auth::attempt($credentials, $request->remember)) {
             $request->session()->regenerate();
-            return redirect('/home')->with('success', 'Login berhasil');
+            return redirect()->route('home')->with('success', 'Login berhasil');
         }
 
-        return back()->withErrors([
-            'email' => 'Email atau password salah',
+        return back()->with([
+            'error' => 'Email atau password salah',
         ])->onlyInput('email');
     }
 
@@ -37,13 +37,19 @@ class AuthController extends Controller
             'password' => 'required|confirmed|min:6',
         ]);
 
+        if (User::where('email', $request->email)->exists()) {
+            return redirect()->back()->with([
+                'error' => 'Email sudah terdaftar',
+            ])->onlyInput('email');
+        }
+
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
         ]);
 
-        return redirect('/home')->with('success', 'Registrasi berhasil');
+        return redirect()->route('home')->with('success', 'Registrasi berhasil, silahkan masuk');
     }
 
     public function logout(Request $request)
