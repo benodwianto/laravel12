@@ -20,7 +20,7 @@ class CartController extends Controller
     public function store(Request $request)
     {
         if (Auth::guest()) {
-            return redirect()->back()->with('error', 'Anda harus login terlebih dahulu.');
+            return redirect()->route('login.form')->with('error', 'Anda harus login terlebih dahulu.');
         }
 
         $request->validate([

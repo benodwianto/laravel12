@@ -19,7 +19,8 @@
                 <!-- Left links -->
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
-                        <a class="nav-link fw-semibold position-relative" href="{{ route('home') }}#product" style="transition: 0.3s;">
+                        <a class="nav-link fw-semibold position-relative" href="{{ route('home') }}#product"
+                            style="transition: 0.3s;">
                             Produk
                             <span class="d-block"
                                 style="height:2px; background:#0d6efd; width:0; transition:width 0.3s;"></span>
@@ -39,7 +40,8 @@
                 <form class="d-flex me-3">
                     <input class="form-control me-2 rounded-pill" type="search" placeholder="Search..."
                         aria-label="Search">
-                    <button class="btn btn-primary rounded-pill px-3" type="submit"><i class="bi bi-search"></i></button>
+                    <button class="btn btn-primary rounded-pill px-3" type="submit"><i
+                            class="bi bi-search"></i></button>
                 </form>
 
                 <!-- Cart & User -->
@@ -121,10 +123,8 @@
 
                     @guest
                         <li class="nav-item d-flex gap-2" style="list-style: none;">
-                            <a href="#" class="btn btn-outline-primary rounded-pill px-3" data-bs-toggle="modal"
-                                data-bs-target="#authModal">Masuk</a>
-                            <a href="#" class="btn btn-primary rounded-pill px-3" data-bs-toggle="modal"
-                                data-bs-target="#authModal">Daftar</a>
+                            <a href="{{ route('login.form') }}" class="btn btn-outline-primary rounded-pill px-3">Masuk</a>
+                            <a href="{{ route('register.form') }}" class="btn btn-primary rounded-pill px-3">Daftar</a>
                         </li>
                     @endguest
                 </ul>

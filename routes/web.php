@@ -19,8 +19,10 @@ Route::get('/cities/{provinceId}', [RajaOngkirController::class, 'getcities']);
 Route::get('/districts/{cityId}', [RajaOngkirController::class, 'getDistrict']);
 Route::post('/ongkir', [RajaOngkirController::class, 'checkOngkir']);
 
-Route::resource('cart', CartController::class);
+Route::resource('cart', CartController::class); 
 
+Route::get('/login', [AuthController::class, 'loginForm'])->name('login.form');
 Route::post('/login', [AuthController::class, 'login'])->name('login');
 Route::post('/register', [AuthController::class, 'register'])->name('register');
+Route::get('/register', [AuthController::class, 'registerForm'])->name('register.form');
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');

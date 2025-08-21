@@ -10,6 +10,11 @@ use Illuminate\Support\Facades\Hash;
 class AuthController extends Controller
 {
 
+    public function loginForm()
+    {
+        return view('auth.login');
+    }
+
     public function login(Request $request)
     {
         $request->validate([
@@ -17,16 +22,24 @@ class AuthController extends Controller
             'password' => 'required',
         ]);
 
-        $credentials = $request->only('email_login', 'password_login');
+        $credentials = [
+            'email' => $request->email,
+            'password' => $request->password
+        ];
 
         if (Auth::attempt($credentials, $request->remember)) {
             $request->session()->regenerate();
             return redirect()->route('home')->with('success', 'Login berhasil');
         }
 
-        return back()->with([
+        return redirect()->route('login')->with([
             'error' => 'Email atau password salah',
         ])->onlyInput('email');
+    }
+
+    public function registerForm()
+    {
+        return view('auth.register');
     }
 
     public function register(Request $request)
@@ -37,19 +50,13 @@ class AuthController extends Controller
             'password' => 'required|confirmed|min:6',
         ]);
 
-        if (User::where('email', $request->email)->exists()) {
-            return redirect()->back()->with([
-                'error' => 'Email sudah terdaftar',
-            ])->onlyInput('email');
-        }
-
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
         ]);
 
-        return redirect()->route('home')->with('success', 'Registrasi berhasil, silahkan masuk');
+        return redirect()->route('login')->with('success', 'Registrasi berhasil, silahkan masuk');
     }
 
     public function logout(Request $request)
