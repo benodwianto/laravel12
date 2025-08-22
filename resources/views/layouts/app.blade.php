@@ -22,7 +22,7 @@
 <body>
     @include('partials.navbar')
 
-    <main class="container">
+    <main class="content">
         @yield('content')
     </main>
 

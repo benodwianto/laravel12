@@ -4,7 +4,7 @@
 
 @section('content')
     {{-- Slide Photo --}}
-    <div id="carouselExampleControls" class="carousel slide mb-5" data-bs-ride="carousel">
+    <div id="carouselExampleControls" class="carousel slide mb-0" data-bs-ride="carousel">
         <div class="carousel-inner" style="max-height: 600px;">
 
             <!-- Slide 1 -->
@@ -63,7 +63,103 @@
     </div>
 
     {{-- Slide Photo End --}}
-    <div class="container my-4" id="product">
+
+    <div class="container my-0" id="product">
+        <div class="row mb-5 shadow-sm">
+            <div class="col-md-12 text-center">
+                <h1 class="fw-bold text-uppercase d-inline-flex align-items-center gap-3"
+                    style="font-size: 2.5rem; letter-spacing: 1px;">
+
+                    <i class="bi bi-dropbox" style="font-size: 50px; color:#8a0e23;"></i>
+
+                    <span class="text-dark">Produk</span>
+                    <span class="text-primary">Terbaru</span>
+                </h1>
+                <p class="mt-2 text-muted">Temukan produk terbaik yang anda butuhkan!!</p>
+            </div>
+        </div>
+
+        <div class="row shadow-sm">
+            {{-- Product list --}}
+            <div class="col-md-12">
+                <div class="row">
+                    @foreach ($latestProduct as $product)
+                        <div class="col-md-3 mb-4">
+                            <div class="card h-100 product-card">
+                                <a href="{{ route('products.show', $product->id) }}">
+                                    <img src="{{ asset('images/' . $product->image) }}" class="card-img-top fixed-img"
+                                        alt="{{ $product->title }}">
+                                </a>
+
+                                <div class="card-body d-flex flex-column">
+                                    <a href="{{ route('products.show', $product->id) }}"
+                                        class="text-decoration-none text-dark">
+                                        <small class="card-title">{{ Str::limit($product->title, 30, '..') }}</small>
+                                    </a>
+
+                                    {{-- Harga & Diskon --}}
+                                    <div class="product-price mt-2">
+                                        @if (!empty($product->discount) && $product->discount > 0)
+                                            @php
+                                                $finalPrice =
+                                                    $product->price - ($product->price * $product->discount) / 100;
+                                            @endphp
+                                            <span class="final-price fw-bold text-danger">
+                                                Rp {{ number_format($finalPrice, 0, ',', '.') }}
+                                            </span>
+                                            <div class="d-flex align-items-center gap-2">
+                                                <span class="old-price text-decoration-line-through text-muted">
+                                                    Rp {{ number_format($product->price, 0, ',', '.') }}
+                                                </span>
+                                                <span class="discount badge bg-danger">
+                                                    -{{ $product->discount }}%
+                                                </span>
+                                            </div>
+                                        @else
+                                            <span class="final-price">
+                                                Rp {{ number_format($product->price, 0, ',', '.') }}
+                                            </span>
+                                        @endif
+                                    </div>
+
+                                    <p class="card-text mt-2">
+                                        Deskripsi: {!! Str::limit(strip_tags($product->description), 50, '...') !!}
+                                    </p>
+
+                                    {{-- alert --}}
+                                    @include('alert')
+                                    <div class="mt-auto d-flex justify-content-center align-items-center">
+                                        <form action="{{ route('cart.store') }}" method="POST"
+                                            class="d-flex align-items-center gap-2">
+                                            @csrf
+                                            <input type="hidden" name="product_id" value="{{ $product->id }}">
+
+                                            <div class="input-group input-group-sm" style="width: 100px;">
+                                                <button type="button" class="btn btn-outline-secondary"
+                                                    onclick="this.parentNode.querySelector('input').stepDown()">-</button>
+                                                <input type="number" name="quantity" value="1" min="1"
+                                                    class="form-control text-center border-secondary" />
+                                                <button type="button" class="btn btn-outline-secondary"
+                                                    onclick="this.parentNode.querySelector('input').stepUp()">+</button>
+                                            </div>
+
+                                            <button type="submit" class="btn btn-cart ms-2">
+                                                <i class="bi bi-cart-plus"></i> Tambah
+                                            </button>
+                                        </form>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="container my-0" id="product">
         <div class="row mb-5 shadow-sm">
             <div class="col-md-12 text-center">
                 <h1 class="fw-bold text-uppercase d-inline-flex align-items-center gap-3"

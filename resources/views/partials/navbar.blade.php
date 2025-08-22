@@ -34,6 +34,14 @@
                                 style="height:2px; background:#0d6efd; width:0; transition:width 0.3s;"></span>
                         </a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link fw-semibold position-relative" href="{{ route('home') }}#footer"
+                            style="transition: 0.3s;">
+                            Kontak
+                            <span class="d-block"
+                                style="height:2px; background:#0d6efd; width:0; transition:width 0.3s;"></span>
+                        </a>
+                    </li>
                 </ul>
 
                 <!-- Search -->

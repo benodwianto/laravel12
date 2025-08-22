@@ -22,24 +22,22 @@
                         <form action="{{ route('products.store') }}" method="POST" enctype="multipart/form-data">
                             @csrf
 
-                            {{-- IMAGE --}}
-                            <div class="form-group mb-3">
-                                <label class="font-weight-bold">IMAGE</label>
-                                <div class="d-flex align-items-center">
-                                    <!-- Input File -->
-                                    <input type="file"
-                                        class="form-control form-control-sm @error('image') is-invalid @enderror"
-                                        name="image" id="imageInput" style="max-width: 250px;">
+                            {{-- IMAGES --}}
+                            <div class="mb-3">
+                                <label class="form-label fw-semibold">Foto Produk</label>
+                                <input type="file"
+                                    class="form-control form-control-sm @error('images') is-invalid @enderror @error('images.*') is-invalid @enderror"
+                                    name="images[]" id="imagesInput" multiple accept="image/*">
 
-                                    <!-- Preview Kecil -->
-                                    <img id="preview" src="#" alt="Preview" class="ms-3 rounded border d-none"
-                                        style="width: 80px; height: 80px; object-fit: cover;">
-                                </div>
+                                {{-- Preview Grid --}}
+                                <div id="previewContainer" class="d-flex flex-wrap gap-2 mt-2"></div>
 
-                                @error('image')
-                                    <div class="alert alert-danger mt-2">
-                                        {{ $message }}
-                                    </div>
+                                {{-- Error Message --}}
+                                @error('images')
+                                    <small class="text-danger d-block">{{ $message }}</small>
+                                @enderror
+                                @error('images.*')
+                                    <small class="text-danger d-block">{{ $message }}</small>
                                 @enderror
                             </div>
 
@@ -47,7 +45,7 @@
                             <div class="mb-3">
                                 <label class="form-label fw-semibold">Judul</label>
                                 <input type="text" class="form-control @error('title') is-invalid @enderror"
-                                    name="title" value="{{ old('title') }}" placeholder="Masukkan Judul Product">
+                                    name="title" value="{{ old('title') }}" placeholder="Masukkan Judul Produk">
                                 @error('title')
                                     <small class="text-danger">{{ $message }}</small>
                                 @enderror
@@ -57,7 +55,7 @@
                             <div class="mb-3">
                                 <label class="form-label fw-semibold">Deskripsi</label>
                                 <textarea class="form-control @error('description') is-invalid @enderror" name="description" rows="4"
-                                    placeholder="Masukkan Description Product">{{ old('description') }}</textarea>
+                                    placeholder="Masukkan Deskripsi Produk">{{ old('description') }}</textarea>
                                 @error('description')
                                     <small class="text-danger">{{ $message }}</small>
                                 @enderror
@@ -81,9 +79,9 @@
                                 {{-- PRICE --}}
                                 <div class="col-md-4">
                                     <div class="mb-3">
-                                        <label class="form-label fw-semibold">Harga</label>
+                                        <label class="form-label fw-semibold">Harga Jual</label>
                                         <input type="number" class="form-control @error('price') is-invalid @enderror"
-                                            name="price" value="{{ old('price') }}" placeholder="Masukkan Harga"
+                                            name="price" value="{{ old('price') }}" placeholder="Masukkan Harga Jual"
                                             min="0">
                                         @error('price')
                                             <small class="text-danger">{{ $message }}</small>
@@ -104,7 +102,7 @@
                                     </div>
                                 </div>
 
-                                {{-- berat --}}
+                                {{-- WEIGHT --}}
                                 <div class="col-md-4">
                                     <div class="mb-3">
                                         <label class="form-label fw-semibold">Berat Produk (gr)</label>
@@ -123,7 +121,8 @@
                                         <label class="form-label fw-semibold">Diskon (%)</label>
                                         <input type="number"
                                             class="form-control @error('discount') is-invalid @enderror" name="discount"
-                                            value="{{ old('discount') }}" placeholder="0 - 100" min="0">
+                                            value="{{ old('discount') }}" placeholder="0 - 100" min="0"
+                                            max="100">
                                         @error('discount')
                                             <small class="text-danger">{{ $message }}</small>
                                         @enderror
@@ -148,19 +147,37 @@
     <script>
         CKEDITOR.replace('description');
 
-        document.getElementById('imageInput').addEventListener('change', function(e) {
-            const preview = document.getElementById('preview');
-            const file = e.target.files[0];
+        const input = document.getElementById('imagesInput');
+        const previewContainer = document.getElementById('previewContainer');
 
-            if (file) {
-                preview.src = URL.createObjectURL(file);
-                preview.classList.remove('d-none');
-            } else {
-                preview.src = "#";
-                preview.classList.add('d-none');
+        input.addEventListener('change', function(e) {
+            // Ambil semua file lama + baru
+            let files = Array.from(previewContainer.querySelectorAll('img')).length + e.target.files.length;
+
+            if (files > 5) {
+                alert("Maksimal 5 foto yang boleh dipilih!");
+                input.value = ""; // reset input
+                return;
             }
+
+            Array.from(e.target.files).forEach(file => {
+                if (file.type.startsWith('image/')) {
+                    const reader = new FileReader();
+                    reader.onload = function(event) {
+                        const img = document.createElement('img');
+                        img.src = event.target.result;
+                        img.classList.add('rounded', 'border');
+                        img.style.width = "80px";
+                        img.style.height = "80px";
+                        img.style.objectFit = "cover";
+                        previewContainer.appendChild(img);
+                    }
+                    reader.readAsDataURL(file);
+                }
+            });
         });
     </script>
+
 </body>
 
 </html>

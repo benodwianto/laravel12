@@ -42,9 +42,14 @@
                                 @forelse ($products as $product)
                                     <tr>
                                         <td class="text-center">
-                                            <img src="{{ asset('images/' . $product->image) }}" class="rounded"
-                                                style="width: 150px">
+                                            @if ($product->images->isNotEmpty())
+                                                <img src="{{ asset('storage/' . $product->images->first()->image) }}"
+                                                    class="rounded" style="width: 120px">
+                                            @else
+                                                <span class="text-muted">No Image</span>
+                                            @endif
                                         </td>
+
                                         <td>{{ $product->title }}</td>
                                         <td>{{ 'Rp ' . number_format($product->modal_price, 2, ',', '.') }}</td>
                                         <td>{{ 'Rp ' . number_format($product->price, 2, ',', '.') }}</td>

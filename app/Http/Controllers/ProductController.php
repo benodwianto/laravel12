@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
+use App\Models\ProductImage;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Storage;
@@ -11,7 +12,7 @@ class ProductController extends Controller
 {
     public function index()
     {
-        $products = Product::latest()->paginate(10);
+        $products = Product::latest()->with('images')->paginate(10);
 
         return view('products.index', compact('products'));
     }
@@ -23,33 +24,29 @@ class ProductController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
-            'image' => 'required|image|mimes:jpeg,jpg,png|max:2048',
-            'title' => 'required|min:5',
-            'description' => 'required|min:10',
-            'modal_price' => 'required|numeric',
-            'price' => 'required|numeric',
-            'dicount' => 'numeric',
-            'stock' => 'required|numeric',
-            'weight' => 'numeric',
-        ]);
-
-        $image = $request->file('image');
-        $image_name = time() . '.' . $image->getClientOriginalExtension();
-        $image->move(public_path('images'), $image_name);
-
-        Product::create([
-            'image' => $image_name,
+        $product = Product::create([
             'title' => $request->title,
             'description' => $request->description,
             'modal_price' => $request->modal_price,
             'price' => $request->price,
-            'discount' => $request->discount,
-            'stock' => $request->stock,
-            'weight' => $request->weight
+            'discount' => $request->discount ?? 0,
+            'stock' => $request->stock ?? 0,
+            'weight' => $request->weight ?? 0,
         ]);
 
-        return redirect()->route('products.index')->with('success', 'Produk berhasil ditambahkan.');
+        // Simpan banyak gambar
+        if ($request->hasFile('images')) {
+            foreach ($request->file('images') as $image) {
+                $path = $image->store('products', 'public');
+
+                ProductImage::create([
+                    'product_id' => $product->id,
+                    'image' => $path
+                ]);
+            }
+        }
+
+        return redirect()->route('products.index')->with('success', 'Produk berhasil ditambahkan');
     }
 
     public function show(Product $product)
