@@ -154,27 +154,27 @@
             // Ambil semua file lama + baru
             let files = Array.from(previewContainer.querySelectorAll('img')).length + e.target.files.length;
 
-            if (files > 5) {
-                alert("Maksimal 5 foto yang boleh dipilih!");
-                input.value = ""; // reset input
-                return;
-            }
+            // if (files > 5) {
+            //     alert("Maksimal 5 foto yang boleh dipilih!");
+            //     input.value = ""; // reset input
+            //     return;
+            // }
 
-            Array.from(e.target.files).forEach(file => {
-                if (file.type.startsWith('image/')) {
-                    const reader = new FileReader();
-                    reader.onload = function(event) {
-                        const img = document.createElement('img');
-                        img.src = event.target.result;
-                        img.classList.add('rounded', 'border');
-                        img.style.width = "80px";
-                        img.style.height = "80px";
-                        img.style.objectFit = "cover";
-                        previewContainer.appendChild(img);
-                    }
-                    reader.readAsDataURL(file);
-                }
-            });
+            // Array.from(e.target.files).forEach(file => {
+            //     if (file.type.startsWith('image/')) {
+            //         const reader = new FileReader();
+            //         reader.onload = function(event) {
+            //             const img = document.createElement('img');
+            //             img.src = event.target.result;
+            //             img.classList.add('rounded', 'border');
+            //             img.style.width = "80px";
+            //             img.style.height = "80px";
+            //             img.style.objectFit = "cover";
+            //             previewContainer.appendChild(img);
+            //         }
+            //         reader.readAsDataURL(file);
+            //     }
+            // });
         });
     </script>
 

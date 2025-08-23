@@ -46,6 +46,8 @@ class ProductController extends Controller
             }
         }
 
+        dd($request->file('images'));
+
         return redirect()->route('products.index')->with('success', 'Produk berhasil ditambahkan');
     }
 
